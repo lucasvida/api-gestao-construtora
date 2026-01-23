@@ -1,0 +1,66 @@
+import { db } from "../config/db.js";
+import { Request, Response } from "express";
+
+interface Cliente {
+    id?: number;
+    nome: string;
+    telefone: string;
+    email: string;
+    cep: string;
+    rua: string;
+    bairro: string;
+    cidade: string;
+    estado: string;
+    emprendimento_id: number;
+}
+
+export const getClientes = async (req: Request, res: Response) => {
+    try {
+        const result = await db.execute(`
+            SELECT 
+                c.*, 
+                e.nome as nome_emprendimento 
+            FROM clientes c
+            LEFT JOIN empreendimentos e ON c.emprendimento_id = e.id
+        `);
+        res.status(200).json(result.rows);
+    } catch (error) {
+        console.error("Erro ao buscar clientes:", error);
+        res.status(500).json({ message: "Error fetching clients" });
+    }
+};
+
+export const createCliente = async (req: Request, res: Response) => {
+    try {
+        const { 
+            nome, 
+            telefone, 
+            email, 
+            cep, 
+            rua, 
+            bairro, 
+            cidade, 
+            estado, 
+            emprendimento_id 
+        }: Cliente = req.body;
+
+        if (!nome || !email || !telefone || !emprendimento_id) {
+            return res.status(400).json({ message: "Missing required fields (nome, email, telefone, emprendimento_id)" });
+        }
+
+        await db.execute({
+            sql: "INSERT INTO clientes (nome, telefone, email, cep, rua, bairro, cidade, estado, emprendimento_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            args: [nome, telefone, email, cep, rua, bairro, cidade, estado, emprendimento_id],
+        });
+
+        res.status(201).json({ 
+            message: "Cliente created successfully", 
+            data: { nome, email } 
+        });
+    } catch (error: any) {
+        if (error.code === 'SQLITE_CONSTRAINT' || error.message?.includes("UNIQUE constraint failed: clientes.email")) {
+            return res.status(409).json({ message: "Client already exists with this email" });
+        }
+        res.status(500).json({ message: "Error creating client" });
+    }
+};
