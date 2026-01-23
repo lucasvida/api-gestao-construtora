@@ -26,6 +26,7 @@
   "scripts": {
     "dev": "node --watch dist/server.js",
     "start": "node dist/server.js",
+    "build": "tsc",
     "test": ""
   },
   "dependencies": {
