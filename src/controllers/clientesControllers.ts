@@ -1,11 +1,13 @@
 import { db } from "../config/db.js";
 import { Request, Response } from "express";
+import maskInfo from "../helpers/maskInfo.js";
 
 interface Cliente {
     id?: number;
     nome: string;
     telefone: string;
     email: string;
+    cpf: string;
     cep: string;
     rua: string;
     bairro: string;
@@ -23,7 +25,11 @@ export const getClientes = async (req: Request, res: Response) => {
             FROM clientes c
             LEFT JOIN empreendimentos e ON c.emprendimento_id = e.id
         `);
-        res.status(200).json(result.rows);
+        res.status(200).json(result.rows.map((dadosCliente: any) => ({
+            ...dadosCliente,
+            cpf: maskInfo.maskCpf(dadosCliente.cpf),
+            email: maskInfo.maskEmail(dadosCliente.email)
+        })));
     } catch (error) {
         console.error("Erro ao buscar clientes:", error);
         res.status(500).json({ message: "Error fetching clients" });
@@ -36,6 +42,7 @@ export const createCliente = async (req: Request, res: Response) => {
             nome, 
             telefone, 
             email, 
+            cpf,
             cep, 
             rua, 
             bairro, 
@@ -49,9 +56,9 @@ export const createCliente = async (req: Request, res: Response) => {
         }
 
         await db.execute({
-            sql: "INSERT INTO clientes (nome, telefone, email, cep, rua, bairro, cidade, estado, emprendimento_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            args: [nome, telefone, email, cep, rua, bairro, cidade, estado, emprendimento_id],
-        });
+            sql: "INSERT INTO clientes (nome, telefone, email, cpf, cep, rua, bairro, cidade, estado, emprendimento_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            args: [nome, telefone, email, cpf, cep, rua, bairro, cidade, estado, emprendimento_id],
+        }); 
 
         res.status(201).json({ 
             message: "Cliente created successfully", 
