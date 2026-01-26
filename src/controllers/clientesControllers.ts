@@ -10,6 +10,7 @@ interface Cliente {
     cpf: string;
     cep: string;
     rua: string;
+    numero: string;
     bairro: string;
     cidade: string;
     estado: string;
@@ -20,7 +21,18 @@ export const getClientes = async (req: Request, res: Response) => {
     try {
         const result = await db.execute(`
             SELECT 
-                c.*, 
+                c.id, 
+                c.nome, 
+                c.telefone, 
+                c.email, 
+                c.cpf, 
+                c.cep, 
+                c.rua,
+                c.numero, 
+                c.bairro, 
+                c.cidade, 
+                c.estado, 
+                c.emprendimento_id,
                 e.nome as nome_emprendimento 
             FROM clientes c
             LEFT JOIN empreendimentos e ON c.emprendimento_id = e.id
@@ -45,6 +57,7 @@ export const createCliente = async (req: Request, res: Response) => {
             cpf,
             cep, 
             rua, 
+            numero,
             bairro, 
             cidade, 
             estado, 
@@ -56,8 +69,8 @@ export const createCliente = async (req: Request, res: Response) => {
         }
 
         await db.execute({
-            sql: "INSERT INTO clientes (nome, telefone, email, cpf, cep, rua, bairro, cidade, estado, emprendimento_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            args: [nome, telefone, email, cpf, cep, rua, bairro, cidade, estado, emprendimento_id],
+            sql: "INSERT INTO clientes (nome, telefone, email, cpf, cep, rua, numero, bairro, cidade, estado, emprendimento_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            args: [nome, telefone, email, cpf, cep, rua, numero, bairro, cidade, estado, emprendimento_id],
         }); 
 
         res.status(201).json({ 

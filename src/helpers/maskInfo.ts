@@ -1,15 +1,17 @@
 const maskInfo = {
-  maskCpf: (cpf: string) => {
-    if (!cpf || cpf.length < 11) return cpf;
-    return cpf.substring(0, 3) + ".•••.•••-" + cpf.substring(9);
+  maskCpf: (cpf: any) => {
+    const sCpf = String(cpf || "").trim();
+    if (sCpf.length < 11) return sCpf;
+    return sCpf.substring(0, 3) + ".•••.•••-" + sCpf.substring(sCpf.length - 2);
   },
 
-  maskEmail: (email: string) => {
-    if (!email || !email.includes("@")) return email;
+  maskEmail: (email: any) => {
+    const sEmail = String(email || "").trim();
+    if (!sEmail.includes("@")) return sEmail;
     return (
-      email.substring(0, 3) +
+      sEmail.substring(0, 3) +
       "••••••" +
-      email.substring(email.indexOf("@"))
+      sEmail.substring(sEmail.indexOf("@"))
     );
   }
 };
