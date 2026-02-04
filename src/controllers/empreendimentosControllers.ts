@@ -6,6 +6,7 @@ interface Empreendimento {
     nome: string;
     status: string;
     status_andamento: string;
+    created_at?: Date;
 }
 
 export const getEmpreendimentos = async (req: Request, res: Response) => {
@@ -26,8 +27,8 @@ export const createEmpreendimento = async (req: Request, res: Response) => {
         }
 
         await db.execute({
-            sql: "INSERT INTO empreendimentos (nome, status, status_andamento) VALUES (?, ?, ?)",
-            args: [nome, status, status_andamento],
+            sql: "INSERT INTO empreendimentos (nome, status, status_andamento, created_at) VALUES (?, ?, ?, ?)",
+            args: [nome, status, status_andamento, new Date()],
         });
 
         res.status(201).json({

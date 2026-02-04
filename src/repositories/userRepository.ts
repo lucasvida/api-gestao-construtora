@@ -6,6 +6,7 @@ export interface User {
     email: string;
     senha: string;
     role: string;
+    created_at?: Date;
 }
 
 export const userRepository = {
@@ -23,8 +24,8 @@ export const userRepository = {
     },
     async create(user: User): Promise<void> {
         await db.execute({
-            sql: "INSERT INTO users (nome, email, senha, role) VALUES (?, ?, ?, ?)",
-            args: [user.nome, user.email, user.senha, user.role]
+            sql: "INSERT INTO users (nome, email, senha, role, created_at) VALUES (?, ?, ?, ?, ?)",
+            args: [user.nome, user.email, user.senha, user.role, new Date()]
         });
     }
 };

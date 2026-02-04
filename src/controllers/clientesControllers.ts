@@ -15,6 +15,7 @@ interface Cliente {
     cidade: string;
     estado: string;
     emprendimento_id: number;
+    created_at?: Date;
 }
 
 export const getClientes = async (req: Request, res: Response) => {
@@ -69,8 +70,8 @@ export const createCliente = async (req: Request, res: Response) => {
         }
 
         await db.execute({
-            sql: "INSERT INTO clientes (nome, telefone, email, cpf, cep, rua, numero, bairro, cidade, estado, emprendimento_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            args: [nome, telefone, email, cpf, cep, rua, numero, bairro, cidade, estado, emprendimento_id],
+            sql: "INSERT INTO clientes (nome, telefone, email, cpf, cep, rua, numero, bairro, cidade, estado, emprendimento_id, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            args: [nome, telefone, email, cpf, cep, rua, numero, bairro, cidade, estado, emprendimento_id, new Date()],
         }); 
 
         res.status(201).json({ 
