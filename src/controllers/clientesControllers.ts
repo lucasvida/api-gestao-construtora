@@ -71,7 +71,7 @@ export const createCliente = async (req: Request, res: Response) => {
 
         await db.execute({
             sql: "INSERT INTO clientes (nome, telefone, email, cpf, cep, rua, numero, bairro, cidade, estado, emprendimento_id, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            args: [nome, telefone, email, cpf, cep, rua, numero, bairro, cidade, estado, emprendimento_id, new Date()],
+            args: [nome, telefone, email, cpf, cep, rua, numero, bairro, cidade, estado, emprendimento_id, new Date().toISOString()],
         }); 
 
         res.status(201).json({ 

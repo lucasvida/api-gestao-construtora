@@ -28,7 +28,7 @@ export const createEmpreendimento = async (req: Request, res: Response) => {
 
         await db.execute({
             sql: "INSERT INTO empreendimentos (nome, status, status_andamento, created_at) VALUES (?, ?, ?, ?)",
-            args: [nome, status, status_andamento, new Date()],
+            args: [nome, status, status_andamento, new Date().toISOString()],
         });
 
         res.status(201).json({
