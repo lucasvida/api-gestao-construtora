@@ -1,6 +1,7 @@
 import { db } from "../config/db.js";
 import { Request, Response } from "express";
 import maskInfo from "../helpers/maskInfo.js";
+import { clientSchema } from "../schemas/clients.js";
 
 interface Cliente {
     id?: number;
@@ -14,7 +15,7 @@ interface Cliente {
     bairro: string;
     cidade: string;
     estado: string;
-    emprendimento_id: number;
+    developments_id: number;
     created_at?: Date;
 }
 
@@ -33,10 +34,10 @@ export const getClientes = async (req: Request, res: Response) => {
                 c.bairro, 
                 c.cidade, 
                 c.estado, 
-                c.emprendimento_id,
+                c.developments_id,
                 e.nome as nome_emprendimento 
             FROM clientes c
-            LEFT JOIN empreendimentos e ON c.emprendimento_id = e.id
+            LEFT JOIN empreendimentos e ON c.developments_id = e.id
         `);
         res.status(200).json(result.rows.map((dadosCliente: any) => ({
             ...dadosCliente,
@@ -62,16 +63,16 @@ export const createCliente = async (req: Request, res: Response) => {
             bairro, 
             cidade, 
             estado, 
-            emprendimento_id 
-        }: Cliente = req.body;
+            developments_id 
+        } = clientSchema.parse(req.body);
 
-        if (!nome || !email || !telefone || !emprendimento_id) {
-            return res.status(400).json({ message: "Missing required fields (nome, email, telefone, emprendimento_id)" });
+        if (!nome || !email || !telefone || !developments_id) {
+            return res.status(400).json({ message: "Missing required fields (nome, email, telefone, developments_id)" });
         }
 
         await db.execute({
-            sql: "INSERT INTO clientes (nome, telefone, email, cpf, cep, rua, numero, bairro, cidade, estado, emprendimento_id, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            args: [nome, telefone, email, cpf, cep, rua, numero, bairro, cidade, estado, emprendimento_id, new Date().toISOString()],
+            sql: "INSERT INTO clientes (nome, telefone, email, cpf, cep, rua, numero, bairro, cidade, estado, developments_id, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            args: [nome, telefone, email, cpf, cep, rua, numero, bairro, cidade, estado, developments_id, new Date().toISOString()],
         }); 
 
         res.status(201).json({ 

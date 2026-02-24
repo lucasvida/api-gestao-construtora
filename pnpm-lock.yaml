@@ -29,6 +29,9 @@ importers:
       helmet:
         specifier: ^7.1.0
         version: 7.2.0
+      zod:
+        specifier: ^4.3.6
+        version: 4.3.6
     devDependencies:
       '@types/bcrypt':
         specifier: ^6.0.0
@@ -1144,6 +1147,9 @@ packages:
       utf-8-validate:
         optional: true
 
+  zod@4.3.6:
+    resolution: {integrity: sha512-rftlrkhHZOcjDwkGlnUtZZkvaPHCsDATp4pGpuOOMDaTdDDXF91wuVDJoWoPsKX/3YPQ5fHuF3STjcYyKr+Qhg==}
+
 snapshots:
 
   '@esbuild/aix-ppc64@0.27.3':
@@ -2135,3 +2141,5 @@ snapshots:
   wrappy@1.0.2: {}
 
   ws@8.19.0: {}
+
+  zod@4.3.6: {}
