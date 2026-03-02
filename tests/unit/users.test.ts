@@ -3,9 +3,9 @@ import { db } from "../../src/config/db.js";
 const baseUrl = "http://localhost:3333";
 
 describe(
-    "Buscar usuários",
+    "Find users",
     () => {
-        it("Deve buscar todos os usuários", async () => {
+        it("Should find all users", async () => {
             const users = await db.execute("SELECT * FROM users");
             expect(users).toBeInstanceOf(Object);
         });
@@ -13,13 +13,13 @@ describe(
 );
 
 describe(
-    "Adicionar usuário",
+    "Add user",
     () => {
         afterEach(() => {
             vi.restoreAllMocks();
         });
 
-        it("Deve adicionar um usuário simulado", async () => {
+        it("Should add a simulated user", async () => {
             const mockExecute = vi.spyOn(db, "execute").mockResolvedValue({
                 rows: [], 
                 columns: [], 
@@ -35,13 +35,13 @@ describe(
 );
 
 describe(
-    "Deletar usuário",
+    "Delete user",
     () => {
         afterEach(() => {
             vi.restoreAllMocks();
         });
 
-        it("Deve deletar um usuário simulado", async () => {
+        it("Should delete a simulated user", async () => {
             const mockExecute = vi.spyOn(db, "execute").mockResolvedValue({
                 rows: [], 
                 columns: [], 
@@ -57,13 +57,13 @@ describe(
 );
 
 describe(
-    "Atualizar usuário",
+    "Update user",
     () => {
         afterEach(() => {
             vi.restoreAllMocks();
         });
 
-        it("Deve atualizar um usuário simulado", async () => {
+        it("Should update a simulated user", async () => {
             const mockExecute = vi.spyOn(db, "execute").mockResolvedValue({
                 rows: [], 
                 columns: [], 

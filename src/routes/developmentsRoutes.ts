@@ -1,9 +1,9 @@
 import express from "express";
 import { erroRoute } from "../middlewares/erroRoute.js";
-import { createEmpreendimento, getEmpreendimentos } from "../controllers/developmentsControllers.js";
+import { createDevelopment, getDevelopments } from "../controllers/developmentsControllers.js";
 const developmentsRouter = express.Router();
 
-developmentsRouter.route("/").get(getEmpreendimentos).post(createEmpreendimento);
+developmentsRouter.route("/").get(getDevelopments).post(createDevelopment);
 developmentsRouter.all("/",erroRoute);
 
 export default developmentsRouter;

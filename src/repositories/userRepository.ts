@@ -2,9 +2,9 @@ import { db } from "../config/db.js";
 
 export interface User {
     id?: number;
-    nome: string;
+    name: string;
     email: string;
-    senha: string;
+    password: string;
     role: string;
     created_at?: Date;
 }
@@ -24,8 +24,8 @@ export const userRepository = {
     },
     async create(user: User): Promise<void> {
         await db.execute({
-            sql: "INSERT INTO users (nome, email, senha, role, created_at) VALUES (?, ?, ?, ?, ?)",
-            args: [user.nome, user.email, user.senha, user.role, new Date().toISOString()]
+            sql: "INSERT INTO users (name, email, password, role, created_at) VALUES (?, ?, ?, ?, ?)",
+            args: [user.name, user.email, user.password, user.role, new Date().toISOString()]
         });
     }
 };

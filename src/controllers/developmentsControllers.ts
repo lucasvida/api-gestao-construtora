@@ -1,41 +1,41 @@
 import { db } from "../config/db.js";
 import { Request, Response } from "express";
 
-interface Empreendimento {
+interface Development {
     id?: number;
-    nome: string;
+    name: string;
     status: string;
-    status_andamento: string;
+    status_progress: string;
     created_at?: Date;
 }
 
-export const getEmpreendimentos = async (req: Request, res: Response) => {
+export const getDevelopments = async (req: Request, res: Response) => {
     try {
-        const result = await db.execute("SELECT * FROM empreendimentos");
+        const result = await db.execute("SELECT * FROM developments");
         res.status(200).json(result.rows);
     } catch (error) {
-        res.status(500).json({ message: "Error ao buscar empreendimentos" });
+        res.status(500).json({ message: "Error fetching developments" });
     }
 };
 
-export const createEmpreendimento = async (req: Request, res: Response) => {
+export const createDevelopment = async (req: Request, res: Response) => {
     try {
-        const { nome, status, status_andamento }: Empreendimento = req.body;
+        const { name, status, status_progress }: Development = req.body;
 
-        if (!nome || !status || !status_andamento) {
-            return res.status(400).json({ message: "Campos obrigatórios não informados (nome, status, status_andamento)" });
+        if (!name || !status || !status_progress) {
+            return res.status(400).json({ message: "Missing required fields (name, status, status_progress)" });
         }
 
         await db.execute({
-            sql: "INSERT INTO empreendimentos (nome, status, status_andamento, created_at) VALUES (?, ?, ?, ?)",
-            args: [nome, status, status_andamento, new Date().toISOString()],
+            sql: "INSERT INTO developments (name, status, status_progress, created_at) VALUES (?, ?, ?, ?)",
+            args: [name, status, status_progress, new Date().toISOString()],
         });
 
         res.status(201).json({
-            message: "Empreendimento criado com sucesso",
-            data: { nome, status, status_andamento }
+            message: "Development created successfully",
+            data: { name, status, status_progress }
         });
     } catch (error: any) {
-        res.status(500).json({ message: "Error ao criar empreendimento" });
+        res.status(500).json({ message: "Error creating development" });
     }
 };

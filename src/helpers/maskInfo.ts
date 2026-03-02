@@ -5,6 +5,12 @@ const maskInfo = {
     return sCpf.substring(0, 3) + ".•••.•••-" + sCpf.substring(sCpf.length - 2);
   },
 
+  maskPhone: (phone: any) => {
+    const sPhone = String(phone || "").trim();
+    if (sPhone.length < 11) return sPhone;
+    return sPhone.substring(0, 4) + "••••-" + sPhone.substring(sPhone.length - 4);
+  },
+
   maskEmail: (email: any) => {
     const sEmail = String(email || "").trim();
     if (!sEmail.includes("@")) return sEmail;

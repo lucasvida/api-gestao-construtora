@@ -3,84 +3,69 @@ import { Request, Response } from "express";
 import maskInfo from "../helpers/maskInfo.js";
 import { clientSchema } from "../schemas/clients.js";
 
-interface Cliente {
-    id?: number;
-    nome: string;
-    telefone: string;
-    email: string;
-    cpf: string;
-    cep: string;
-    rua: string;
-    numero: string;
-    bairro: string;
-    cidade: string;
-    estado: string;
-    developments_id: number;
-    created_at?: Date;
-}
-
-export const getClientes = async (req: Request, res: Response) => {
+export const getClients = async (req: Request, res: Response) => {
     try {
         const result = await db.execute(`
             SELECT 
                 c.id, 
-                c.nome, 
-                c.telefone, 
+                c.name, 
+                c.phone, 
                 c.email, 
                 c.cpf, 
-                c.cep, 
-                c.rua,
-                c.numero, 
-                c.bairro, 
-                c.cidade, 
-                c.estado, 
+                c.zip_code, 
+                c.street,
+                c.number, 
+                c.neighborhood, 
+                c.city, 
+                c.state, 
                 c.developments_id,
-                e.nome as nome_emprendimento 
-            FROM clientes c
-            LEFT JOIN empreendimentos e ON c.developments_id = e.id
+                e.name as name_development
+            FROM clients c
+            LEFT JOIN developments e ON c.developments_id = e.id
         `);
-        res.status(200).json(result.rows.map((dadosCliente: any) => ({
-            ...dadosCliente,
-            cpf: maskInfo.maskCpf(dadosCliente.cpf),
-            email: maskInfo.maskEmail(dadosCliente.email)
+        res.status(200).json(result.rows.map((client: any) => ({
+            ...client,
+            cpf: maskInfo.maskCpf(client.cpf),
+            email: maskInfo.maskEmail(client.email),
+            phone: maskInfo.maskPhone(client.phone)
         })));
     } catch (error) {
-        console.error("Erro ao buscar clientes:", error);
+        console.error("Error fetching clients:", error);
         res.status(500).json({ message: "Error fetching clients" });
     }
 };
 
-export const createCliente = async (req: Request, res: Response) => {
+export const createClient = async (req: Request, res: Response) => {
     try {
         const { 
-            nome, 
-            telefone, 
+            name, 
+            phone, 
             email, 
             cpf,
-            cep, 
-            rua, 
-            numero,
-            bairro, 
-            cidade, 
-            estado, 
+            zip_code, 
+            street, 
+            number,
+            neighborhood, 
+            city, 
+            state, 
             developments_id 
         } = clientSchema.parse(req.body);
 
-        if (!nome || !email || !telefone || !developments_id) {
-            return res.status(400).json({ message: "Missing required fields (nome, email, telefone, developments_id)" });
+        if (!name || !email || !phone || !developments_id) {
+            return res.status(400).json({ message: "Missing required fields (name, email, phone, developments_id)" });
         }
 
         await db.execute({
-            sql: "INSERT INTO clientes (nome, telefone, email, cpf, cep, rua, numero, bairro, cidade, estado, developments_id, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            args: [nome, telefone, email, cpf, cep, rua, numero, bairro, cidade, estado, developments_id, new Date().toISOString()],
+            sql: "INSERT INTO clients (name, phone, email, cpf, zip_code, street, number, neighborhood, city, state, developments_id, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            args: [name, phone, email, cpf, zip_code, street, number, neighborhood, city, state, developments_id, new Date().toISOString()],
         }); 
 
         res.status(201).json({ 
-            message: "Cliente created successfully", 
-            data: { nome, email } 
+            message: "Client created successfully", 
+            data: { name, email } 
         });
     } catch (error: any) {
-        if (error.code === 'SQLITE_CONSTRAINT' || error.message?.includes("UNIQUE constraint failed: clientes.email")) {
+        if (error.code === 'SQLITE_CONSTRAINT' || error.message?.includes("UNIQUE constraint failed: clients.email")) {
             return res.status(409).json({ message: "Client already exists with this email" });
         }
         res.status(500).json({ message: "Error creating client" });

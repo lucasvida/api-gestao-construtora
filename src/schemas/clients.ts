@@ -1,21 +1,21 @@
 import { z } from "zod";
 
 export const clientSchema = z.object({
-    nome: z.string().min(3, "O nome deve ter pelo menos 3 caracteres"),
-    email: z.string().email("Email inválido"),
-    telefone: z.string().min(11, "O telefone deve ter pelo menos 11 caracteres"),
-    cpf: z.string().min(11, "O CPF deve ter pelo menos 11 caracteres"),
-    rua: z.string().min(3,"A rua deve ter pelo menos 3 caracteres"),
-    numero: z.string().min(1, "O número deve ter pelo menos 1 caractere"),
-    bairro: z.string().min(3, "O bairro deve ter pelo menos 3 caracteres"),
-    cidade: z.string().min(3, "A cidade deve ter pelo menos 3 caracteres"),
-    estado: z.string().min(2, "O estado deve ter pelo menos 2 caracteres"),
-    cep: z.string().min(8, "O CEP deve ter pelo menos 8 caracteres"),
-    developments_id: z.number().min(1, "O desenvolvimento deve ter pelo menos 1 caractere")
+    name: z.string().min(3, "Name must be at least 3 characters long"),
+    email: z.string().email("Invalid email"),
+    phone: z.string().min(11, "Phone must be at least 11 characters long"),
+    cpf: z.string().min(11, "CPF must be at least 11 characters long"),
+    street: z.string().min(3,"Street must be at least 3 characters long"),
+    number: z.string().min(1, "Number must be at least 1 character long"),
+    neighborhood: z.string().min(3, "Neighborhood must be at least 3 characters long"),
+    city: z.string().min(3, "City must be at least 3 characters long"),
+    state: z.string().min(2, "State must be at least 2 characters long"),
+    zip_code: z.string().min(8, "Zip code must be at least 8 characters long"),
+    developments_id: z.number().min(1, "Development ID is required")
 });
 
 export const clientUpdateSchema = z.object({
-    nome: z.string().min(3, "O nome deve ter pelo menos 3 caracteres").optional(),
-    email: z.string().email("Email inválido").optional(),
-    telefone: z.string().min(11, "O telefone deve ter pelo menos 11 caracteres").optional()
+    name: z.string().min(3, "Name must be at least 3 characters long").optional(),
+    email: z.string().email("Invalid email").optional(),
+    phone: z.string().min(11, "Phone must be at least 11 characters long").optional()
 });

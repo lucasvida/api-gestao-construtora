@@ -2,9 +2,9 @@ import { describe, it, expect } from "vitest";
 import { db } from  "../../src/config/db.js";
 
 describe(
-    "Testes de Conexão com Banco de Dados",
+    "Database connection tests",
     () => {
-        it("Deve conectar ao banco de dados", async () => {
+        it("Should connect to the database", async () => {
             await db.execute("SELECT 1");
             expect(true).toBe(true);
         });

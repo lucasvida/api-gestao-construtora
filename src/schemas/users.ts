@@ -1,13 +1,13 @@
 import { z } from "zod";
 
 export const userSchema = z.object({
-    nome: z.string().min(3, "O nome deve ter pelo menos 3 caracteres"),
-    email: z.string().email("Email inválido"),
-    senha: z.string().min(6, "A senha deve ter pelo menos 6 caracteres")
+    name: z.string().min(3, "Name must be at least 3 characters long"),
+    email: z.string().email("Invalid email"),
+    password: z.string().min(6, "Password must be at least 6 characters long")
 });
 
 export const userUpdateSchema = z.object({
-    nome: z.string().min(3, "O nome deve ter pelo menos 3 caracteres").optional(),
-    email: z.string().email("Email inválido").optional(),
-    senha: z.string().min(6, "A senha deve ter pelo menos 6 caracteres").optional()
+    name: z.string().min(3, "Name must be at least 3 characters long").optional(),
+    email: z.string().email("Invalid email").optional(),
+    password: z.string().min(6, "Password must be at least 6 characters long").optional()
 });

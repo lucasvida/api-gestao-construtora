@@ -1,10 +1,10 @@
 import express from "express";
-import { getClientes, createCliente } from "../controllers/clientsControllers.js";
+import { getClients, createClient } from "../controllers/clientsControllers.js";
 import { erroRoute } from "../middlewares/erroRoute.js";
 
 const clientesRouter = express.Router();
 
-clientesRouter.route("/").get(getClientes).post(createCliente);
+clientesRouter.route("/").get(getClients).post(createClient);
 clientesRouter.all("/", erroRoute);
 
 export default clientesRouter;

@@ -2,10 +2,10 @@ import { describe, it, expect } from "vitest";
 import { db } from "../../src/config/db.js";
 
 describe(
-    "Buscar clientes",
+    "Find clients",
     () => {
-        it("Deve buscar todos os clientes", async () => {
-            const clients = await db.execute("SELECT * FROM clientes");
+        it("Should find all clients", async () => {
+            const clients = await db.execute("SELECT * FROM clients");
             expect(clients).toBeInstanceOf(Object);
         });
     }

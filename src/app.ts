@@ -16,7 +16,7 @@ app.use(cors({origin: "*"}));
 app.use(rateLimit({
     windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS || "900000", 10),
     max: parseInt(process.env.RATE_LIMIT_MAX || "100", 10),
-    message: process.env.RATE_LIMIT_MESSAGE || "Muitas requisições feitas pelo seu IP, tente novamente mais tarde."
+    message: process.env.RATE_LIMIT_MESSAGE || "Too many requests from this IP, please try again later."
 }));
 
 app.use("/v1", mainRoute);
