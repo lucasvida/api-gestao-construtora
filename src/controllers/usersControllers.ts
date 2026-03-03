@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { userRepository, type User } from "../repositories/userRepository.js";
-import { userResponseSchema } from "../schemas/users.js";
+import { userResponseSchema, userSchema } from "../schemas/users.js";
+import { API_MESSAGES } from "../helpers/apiMessages.js";
 import bcrypt from "bcrypt";
 
 export const getUsers = async (req: Request, res: Response) => {
@@ -9,38 +10,41 @@ export const getUsers = async (req: Request, res: Response) => {
         const safeUsers = users.map(user => userResponseSchema.parse(user));    
         res.status(200).json(safeUsers);
     } catch (error) {
-        res.status(500).json({ message: "Error fetching users" });
+        res.status(500).json(API_MESSAGES.USERS.FETCH_ERROR);
     }
 };
 
 export const createUser = async (req: Request, res: Response) => {
     try {
-        const { name, email, password, role }: User = req.body;
-
-        if (!name || !email || !password || !role) {
-            return res.status(400).json({ message: "Missing required fields (name, email, password, role)" });
-        }
+        const { name, email, password, role } = userSchema.parse(req.body);
 
         const hashedPassword = await bcrypt.hash(password, 10);
+
+        const finalRole = role || "user";
 
         await userRepository.create({
             name,
             email,
             password: hashedPassword,
-            role
+            role: finalRole
         });
 
         res.status(201).json({
             message: "User created successfully",
-            data: { name, email }
+            data: userResponseSchema.parse({ name, email })
         });
     } catch (error: any) {
-        // Handle duplicate email error
+        if (error.name === "ZodError") {
+            return res.status(400).json({ 
+                message: API_MESSAGES.USERS.INVALID_DATA.message, 
+                errors: (error.issues || []).map((e: any) => e.message) 
+            });
+        }
         if (error.code === 'SQLITE_CONSTRAINT' || error.message?.includes("UNIQUE constraint failed: users.email")) {
-            return res.status(409).json({ message: "User already exists" });
+            return res.status(409).json(API_MESSAGES.USERS.ALREADY_EXISTS);
         }
 
         console.error("Error creating user:", error);
-        res.status(500).json({ message: "Error creating user" });
+        res.status(500).json(API_MESSAGES.USERS.CREATE_ERROR);
     }
 };

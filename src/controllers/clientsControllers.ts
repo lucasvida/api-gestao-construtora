@@ -2,6 +2,7 @@ import { db } from "../config/db.js";
 import { Request, Response } from "express";
 import maskInfo from "../helpers/maskInfo.js";
 import { clientSchema } from "../schemas/clients.js";
+import { API_MESSAGES } from "../helpers/apiMessages.js";
 
 export const getClients = async (req: Request, res: Response) => {
     try {
@@ -31,7 +32,7 @@ export const getClients = async (req: Request, res: Response) => {
         })));
     } catch (error) {
         console.error("Error fetching clients:", error);
-        res.status(500).json({ message: "Error fetching clients" });
+        res.status(500).json(API_MESSAGES.CLIENTS.FETCH_ERROR);
     }
 };
 
@@ -51,10 +52,6 @@ export const createClient = async (req: Request, res: Response) => {
             developments_id 
         } = clientSchema.parse(req.body);
 
-        if (!name || !email || !phone || !developments_id) {
-            return res.status(400).json({ message: "Missing required fields (name, email, phone, developments_id)" });
-        }
-
         await db.execute({
             sql: "INSERT INTO clients (name, phone, email, cpf, zip_code, street, number, neighborhood, city, state, developments_id, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             args: [name, phone, email, cpf, zip_code, street, number, neighborhood, city, state, developments_id, new Date().toISOString()],
@@ -65,9 +62,15 @@ export const createClient = async (req: Request, res: Response) => {
             data: { name, email } 
         });
     } catch (error: any) {
-        if (error.code === 'SQLITE_CONSTRAINT' || error.message?.includes("UNIQUE constraint failed: clients.email")) {
-            return res.status(409).json({ message: "Client already exists with this email" });
+        if (error.name === "ZodError") {
+            return res.status(400).json(API_MESSAGES.CLIENTS.INVALID_DATA);
         }
-        res.status(500).json({ message: "Error creating client" });
+
+        if (error.code === 'SQLITE_CONSTRAINT' || error.message?.includes("UNIQUE constraint failed: clients.email")) {
+            return res.status(409).json(API_MESSAGES.CLIENTS.ALREADY_EXISTS);
+        }
+
+        console.error("Error creating client:", error);
+        res.status(500).json(API_MESSAGES.CLIENTS.CREATE_ERROR);
     }
 };

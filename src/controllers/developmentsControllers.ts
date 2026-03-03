@@ -1,5 +1,6 @@
 import { db } from "../config/db.js";
 import { Request, Response } from "express";
+import { API_MESSAGES } from "../helpers/apiMessages.js";
 
 interface Development {
     id?: number;
@@ -14,7 +15,7 @@ export const getDevelopments = async (req: Request, res: Response) => {
         const result = await db.execute("SELECT developments.*, COUNT(clients.id) as total_clients FROM developments LEFT JOIN clients ON developments.id = clients.developments_id GROUP BY developments.id");
         res.status(200).json(result.rows);
     } catch (error) {
-        res.status(500).json({ message: "Error fetching developments" });
+        res.status(500).json(API_MESSAGES.DEVELOPMENTS.FETCH_ERROR);
     }
 };
 
@@ -23,7 +24,7 @@ export const createDevelopment = async (req: Request, res: Response) => {
         const { name, status, status_progress }: Development = req.body;
 
         if (!name || !status || !status_progress) {
-            return res.status(400).json({ message: "Missing required fields (name, status, status_progress)" });
+            return res.status(400).json(API_MESSAGES.DEVELOPMENTS.INVALID_DATA);
         }
 
         await db.execute({
@@ -36,6 +37,6 @@ export const createDevelopment = async (req: Request, res: Response) => {
             data: { name, status, status_progress }
         });
     } catch (error: any) {
-        res.status(500).json({ message: "Error creating development" });
+        res.status(500).json(API_MESSAGES.DEVELOPMENTS.CREATE_ERROR);
     }
 };
