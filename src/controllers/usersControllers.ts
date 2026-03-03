@@ -1,11 +1,13 @@
 import { Request, Response } from "express";
 import { userRepository, type User } from "../repositories/userRepository.js";
+import { userResponseSchema } from "../schemas/users.js";
 import bcrypt from "bcrypt";
 
 export const getUsers = async (req: Request, res: Response) => {
     try {
         const users = await userRepository.getAll();
-        res.status(200).json(users);
+        const safeUsers = users.map(user => userResponseSchema.parse(user));    
+        res.status(200).json(safeUsers);
     } catch (error) {
         res.status(500).json({ message: "Error fetching users" });
     }

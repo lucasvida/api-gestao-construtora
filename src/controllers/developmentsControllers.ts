@@ -11,7 +11,7 @@ interface Development {
 
 export const getDevelopments = async (req: Request, res: Response) => {
     try {
-        const result = await db.execute("SELECT * FROM developments");
+        const result = await db.execute("SELECT developments.*, COUNT(clients.id) as total_clients FROM developments LEFT JOIN clients ON developments.id = clients.developments_id GROUP BY developments.id");
         res.status(200).json(result.rows);
     } catch (error) {
         res.status(500).json({ message: "Error fetching developments" });

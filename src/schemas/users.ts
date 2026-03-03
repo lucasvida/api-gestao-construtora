@@ -11,3 +11,9 @@ export const userUpdateSchema = z.object({
     email: z.string().email("Invalid email").optional(),
     password: z.string().min(6, "Password must be at least 6 characters long").optional()
 });
+
+export const userResponseSchema = z.object({
+    name: z.string(),
+    email: z.string(),
+    role: z.string()
+});
