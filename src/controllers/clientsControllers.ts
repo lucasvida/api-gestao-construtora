@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import maskInfo from "../helpers/maskInfo.js";
 import { clientSchema } from "../schemas/clients.js";
 import { API_MESSAGES } from "../helpers/apiMessages.js";
-import { ClientWithDevelopment } from "../types/clients.js";
+import { ClientWithDevelopment } from "../types/clientsTypes.js";
 import { clientRepository } from "../repositories/clientsRepository.js";
 
 

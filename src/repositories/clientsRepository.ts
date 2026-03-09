@@ -1,5 +1,5 @@
 import { db } from "../config/db.js";
-import { Client, ClientWithDevelopment } from "../types/clients.js";
+import { Client, ClientWithDevelopment } from "../types/clientsTypes.js";
 
 export const clientRepository = {
     async getAll(): Promise<Client[]> {

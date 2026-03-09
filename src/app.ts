@@ -11,7 +11,7 @@ const app = express();
 
 app.use(helmet());
 app.use(express.json());
-app.use(cors({origin: "*"}));
+app.use(cors({origin: `${process.env.FRONTEND_URL}`}));
 
 app.use(rateLimit({
     windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS || "900000", 10),
