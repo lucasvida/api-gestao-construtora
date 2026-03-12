@@ -146,5 +146,34 @@ export const API_MESSAGES = {
             code: "AUTH_FORBIDDEN",
             message: "Access denied"
         }
+    },
+    ERROR: {
+        NOT_FOUND: {
+            status: 404,
+            code: "ERROR_NOT_FOUND",
+            message: "Resource not found"
+        },
+        FORBIDDEN: {
+            status: 403,
+            code: "ERROR_FORBIDDEN",
+            message: "Access denied"
+        },
+        UNAUTHORIZED: {
+            status: 401,
+            code: "ERROR_UNAUTHORIZED",
+            message: "Unauthorized"
+        },
+        SERVER_ERROR: {
+            status: 500,
+            code: "ERROR_SERVER_ERROR",
+            message: "Internal server error"
+        },
+        METHOD_NOT_ALLOWED(method: string): any {
+            return {
+                status: 405,
+                code: "ERROR_METHOD_NOT_ALLOWED",
+                message: `Method ${method} not allowed`
+            };
+        }
     }
 };

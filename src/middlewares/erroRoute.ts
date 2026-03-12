@@ -1,6 +1,7 @@
 import { Request, Response, RequestHandler } from "express";
+import { API_MESSAGES } from "../helpers/apiMessages.js"
 
 export const erroRoute: RequestHandler = (req: Request, res: Response) => {
-    const method = req.method;
-    res.status(405).json({ message: `Method ${method} not allowed` });
+    const errorInfo = API_MESSAGES.ERROR.METHOD_NOT_ALLOWED(req.method);
+    res.status(errorInfo.status).json(errorInfo);
 };
