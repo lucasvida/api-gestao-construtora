@@ -1,0 +1,12 @@
+packages:
+  - "."
+minimumReleaseAge:
+  default: 3d
+blockExoticSubdeps: true
+trustPolicy: no-downgrade
+allowBuilds:
+  - esbuild
+  - sharp
+onlyBuiltDependencies:
+  - esbuild
+  - sharp
